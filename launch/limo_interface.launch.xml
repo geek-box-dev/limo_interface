@@ -1,28 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="limo_param_path" default="$(find-pkg-share limo_interface)/config/limo.param.yaml"/>
-  <arg name="limo_extra_param_path" default="$(find-pkg-share limo_interface)/config/limo_extra.param.yaml"/>
-  <arg name="limo_diag_publisher_param_path" default="$(find-pkg-share limo_interface)/config/limo_diag_publisher.param.yaml"/>
-
   <!-- vehicle info -->
   <arg name="vehicle_info_param_file" default="$(find-pkg-share vehicle_info_util)/config/vehicle_info.param.yaml"/>
 
   <!-- limo interface -->
   <node pkg="limo_interface" exec="limo_interface" name="limo_interface" output="screen">
-    <param from="$(var limo_param_path)"/>
     <param from="$(var vehicle_info_param_file)"/>
-    <remap from="input/control_mode_request" to="/control/control_mode_request"/>
   </node>
 
-  <!-- limo diagnostics publisher -->
-  <node pkg="limo_interface" exec="limo_diag_publisher" name="limo_diag_publisher" output="screen">
-    <param from="$(var limo_diag_publisher_param_path)"/>
-  </node>
-
-  <!-- limo additional parameter changer -->
-  <node pkg="limo_interface" exec="limo_dynamic_parameter_changer" name="limo_dynamic_parameter_changer" output="screen">
-    <param from="$(var limo_extra_param_path)"/>
-    <remap from="~/output/can" to="/limo/to_can_bus"/>
-    <remap from="~/input/steer_rpt" to="/limo/steering_rpt"/>
-  </node>
 </launch>

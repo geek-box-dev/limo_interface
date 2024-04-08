@@ -120,6 +120,11 @@ void LimoInterface::callbackLimoOdom(const nav_msgs::msg::Odometry::ConstSharedP
 
 void LimoInterface::publishCommands()
 {
+  if (!control_cmd_ptr_) {
+    RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1000, "No control command received.");
+    return;
+  }
+
   geometry_msgs::msg::Twist autoware_cmd;
   autoware_cmd.linear.x = control_cmd_ptr_->longitudinal.speed;
   autoware_cmd.linear.y = 0;
